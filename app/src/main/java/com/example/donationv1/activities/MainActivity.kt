@@ -1,5 +1,6 @@
 package com.example.donationv1
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -7,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.example.donationv1.activities.Report
 
 
 class Donate : AppCompatActivity() {
@@ -34,8 +36,9 @@ class Donate : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_donate, menu)
-        return true
+        getMenuInflater().inflate(R.menu.menu_donate, menu);
+        return true;
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -47,6 +50,7 @@ class Donate : AppCompatActivity() {
                 )
                 toast.show()
             }
+            R.id.menuReport -> startActivity(Intent(this, Report::class.java))
         }
         return super.onOptionsItemSelected(item)
     }
