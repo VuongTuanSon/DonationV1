@@ -1,52 +1,57 @@
-package com.example.donationv1.activities
+package ie.app.activities
 
 import android.content.Intent
+import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.donationv1.Donate
-import com.example.donationv1.R
-import com.example.donationv1.models.Donation
-
+import ie.app.R
+import ie.app.main.DonationApp
 
 open class Base : AppCompatActivity() {
-    val target = 10000
-    var totalDonated = 0
-    fun newDonation(donation: Donation): Boolean {
-        val targetAchieved = totalDonated > target
-        if (!targetAchieved) {
-            donations.add(donation)
-            totalDonated += donation.amount
-        } else {
-            val toast = Toast.makeText(this, "Target Exceeded!", Toast.LENGTH_SHORT)
-            toast.show()
-        }
-        return targetAchieved
+    @JvmField
+    var app: DonationApp? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        app = application as DonationApp
+        app!!.dbManager?.open()
+        app!!.dbManager?.setTotalDonated(this)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onDestroy() {
+        super.onDestroy()
+        app!!.dbManager?.close()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_donate, menu)
         return true
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
-        val report: MenuItem = menu.findItem(R.id.menuReport)
-        val donate: MenuItem = menu.findItem(R.id.menuDonate)
-        if (donations.isEmpty()) report.setEnabled(false) else report.setEnabled(true)
-        if (this is Donate) {
-            donate.setVisible(false)
-            if (!donations.isEmpty()) report.setVisible(true)
+        val report = menu.findItem(R.id.menuReport)
+        val donate = menu.findItem(R.id.menuDonate)
+        val reset = menu.findItem(R.id.menuReset)
+        if (app!!.dbManager?.all?.isEmpty() == true) {
+            report.isEnabled = false
+            reset.isEnabled = false
         } else {
-            report.setVisible(false)
-            donate.setVisible(true)
+            report.isEnabled = true
+            reset.isEnabled = true
+        }
+        if (this is Donate) {
+            donate.isVisible = false
+            if (!app!!.dbManager?.getAll()?.isEmpty()!!) {
+                report.isVisible = true
+                reset.isEnabled = true
+            }
+        } else {
+            report.isVisible = false
+            donate.isVisible = true
+            reset.isVisible = false
         }
         return true
-    }
-
-    fun settings(item: MenuItem?) {
-        Toast.makeText(this, "Settings Selected", Toast.LENGTH_SHORT).show()
     }
 
     fun report(item: MenuItem?) {
@@ -57,7 +62,5 @@ open class Base : AppCompatActivity() {
         startActivity(Intent(this, Donate::class.java))
     }
 
-    companion object {
-        var donations: MutableList<Donation> = ArrayList()
-    }
+    open fun reset(item: MenuItem?) {}
 }
