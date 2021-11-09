@@ -1,13 +1,9 @@
 package com.example.donationv1
 
-import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import com.example.donationv1.activities.Base
-import com.example.donationv1.activities.Report
 import com.example.donationv1.models.Donation
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -35,19 +31,6 @@ class Donate : Base() {
         amountPicker!!.maxValue = 1000
         progressBar!!.max = 10000
         amountTotal!!.text = "$0"
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_donate, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.menuReport -> startActivity(Intent(this, Report::class.java))
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     fun donateButtonPressed(view: View?) {
