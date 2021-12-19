@@ -8,15 +8,15 @@ import ie.app.models.Donation
 
 class DonationApp : Application() {
     val target = 10000
-    @JvmField
     var totalDonated = 0
 
-    //public List <Donation> donations    = new ArrayList<Donation>();
-    var dbManager: DBManager? = null
+    //var dbManager: DBManager? = null
+    var donations: MutableList<Donation> = ArrayList()
     fun newDonation(donation: Donation): Boolean {
         val targetAchieved = totalDonated > target
         if (!targetAchieved) {
-            dbManager!!.add(donation)
+            //dbManager!!.add(donation)
+            donations.add(donation)
             totalDonated += donation.amount
         } else {
             Toast.makeText(this, "Target Exceeded!", Toast.LENGTH_SHORT).show()
@@ -27,7 +27,7 @@ class DonationApp : Application() {
     override fun onCreate() {
         super.onCreate()
         Log.v("Donate", "Donation App Started")
-        dbManager = DBManager(this)
-        Log.v("Donate", "Database Created")
+        //dbManager = new DBManager(this);
+        //Log.v("Donate", "Database Created");
     }
 }

@@ -4,23 +4,25 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import ie.app.R
 import ie.app.main.DonationApp
+import ie.app.models.Donation
 
 open class Base : AppCompatActivity() {
-    @JvmField
-    var app: DonationApp? = null
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        app = application as DonationApp
-        app!!.dbManager?.open()
-        app!!.dbManager?.setTotalDonated(this)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        app!!.dbManager?.close()
+    val target = 10000
+    var totalDonated = 0
+    fun newDonation(donation: Donation): Boolean {
+        val targetAchieved = totalDonated > target
+        if (!targetAchieved) {
+            donations.add(donation)
+            totalDonated += donation.amount
+        } else {
+            val toast = Toast.makeText(this, "Target Exceeded!", Toast.LENGTH_SHORT)
+            toast.show()
+        }
+        return targetAchieved
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -30,26 +32,15 @@ open class Base : AppCompatActivity() {
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         super.onPrepareOptionsMenu(menu)
-        val report = menu.findItem(R.id.menuReport)
-        val donate = menu.findItem(R.id.menuDonate)
-        val reset = menu.findItem(R.id.menuReset)
-        if (app!!.dbManager?.all?.isEmpty() == true) {
-            report.isEnabled = false
-            reset.isEnabled = false
-        } else {
-            report.isEnabled = true
-            reset.isEnabled = true
-        }
+        val report: MenuItem = menu.findItem(R.id.menuReport)
+        val donate: MenuItem = menu.findItem(R.id.menuDonate)
+        if (donations.isEmpty()) report.setEnabled(false) else report.setEnabled(true)
         if (this is Donate) {
             donate.isVisible = false
-            if (!app!!.dbManager?.getAll()?.isEmpty()!!) {
-                report.isVisible = true
-                reset.isEnabled = true
-            }
+            if (!donations.isEmpty()) report.setVisible(true)
         } else {
             report.isVisible = false
             donate.isVisible = true
-            reset.isVisible = false
         }
         return true
     }
@@ -63,4 +54,7 @@ open class Base : AppCompatActivity() {
     }
 
     open fun reset(item: MenuItem?) {}
+    companion object {
+        var donations: MutableList<Donation> = ArrayList()
+    }
 }

@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import com.example.donationv1.R
-import com.example.donationv1.models.Donation
+import ie.app.R
+import ie.app.models.Donation
 
 
-internal class DonationAdapter(context: Context, var donations: List<Donation>) : ArrayAdapter<Donation?>(context, R.layout.row_donate, donations) {
+class DonationAdapter(context: Context, var donations: List<Donation>) : ArrayAdapter<Donation?>(context, R.layout.row_donate, donations) {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val view: View = inflater.inflate(R.layout.row_donate, parent, false)
