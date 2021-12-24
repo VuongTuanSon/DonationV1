@@ -1,14 +1,18 @@
 package ie.app.activities
 
+import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
-import android.os.Bundle
+import android.os.AsyncTask
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import ie.app.R
-import ie.app.main.DonationApp
+import ie.app.api.DonationApi
 import ie.app.models.Donation
+
 
 open class Base : AppCompatActivity() {
     val target = 10000

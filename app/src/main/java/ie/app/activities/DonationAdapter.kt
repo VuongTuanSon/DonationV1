@@ -12,13 +12,17 @@ import ie.app.models.Donation
 
 class DonationAdapter(context: Context, var donations: List<Donation>) : ArrayAdapter<Donation?>(context, R.layout.row_donate, donations) {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val inflater = context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val view: View = inflater.inflate(R.layout.row_donate, parent, false)
         val donation = donations[position]
         val amountView = view.findViewById<View>(R.id.row_amount) as TextView
         val methodView = view.findViewById<View>(R.id.row_method) as TextView
-        amountView.text = "$" + donation.amount
-        methodView.text = donation.method
+        val upvotesView = view.findViewById<View>(R.id.row_upvotes) as TextView
+        amountView.text = "" + donation.amount
+        methodView.text = donation.paymenttype
+        upvotesView.text = "" + donation.upvotes
+        view.tag = donation._id // setting the 'row' id to the id of the donation
         return view
     }
 

@@ -1,24 +1,24 @@
 package ie.app.models
 
 class Donation {
-    @JvmField
-    var id = 0
-    @JvmField
+    var _id: String? = null
     var amount: Int
-    @JvmField
-    var method: String
+    var paymenttype: String
+    var upvotes: Int
 
-    constructor(amount: Int, method: String) {
+    constructor(amount: Int, method: String, upvotes: Int) {
         this.amount = amount
-        this.method = method
+        paymenttype = method
+        this.upvotes = upvotes
     }
 
     constructor() {
         amount = 0
-        method = ""
+        paymenttype = ""
+        upvotes = 0
     }
 
     override fun toString(): String {
-        return "$id, $amount, $method"
+        return "$_id, $amount, $paymenttype, $upvotes"
     }
 }
